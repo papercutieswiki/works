@@ -23,31 +23,6 @@ html, body {
   font-family: "SF UI Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   color: #8c8c8c;
 }
-.page {<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>works</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-@font-face {
-  font-family: "SF UI Display";
-  src: url("SFUIDisplay-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-html, body {
-  width: 100%;
-  min-height: 1080px;
-  background: #ffffff;
-  font-family: "SF UI Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  color: #8c8c8c;
-}
 .page {
   width: 100%;
   max-width: 1920px;
@@ -237,8 +212,8 @@ const data = [
     name: "Orchestral - Folk",
     folder: "orchestral-folk",
     files: [
-      "aviator render5 083126.flac",
-      "still Final (fixed master 26 03).flac",
+      "aviator render5 083126.mp3",
+      "still Final (fixed master 26 03).mp3",
       "mimosa.flac",
       "hate v1.flac"
     ]
@@ -248,11 +223,12 @@ const data = [
     folder: "lofi-hip-hop",
     files: [
       "197 marie - eco stream.flac",
-      "marie - Camadorea.wav",
-      "207 marie - winterberry.wav",
-      "187 marie - wandering.wav",
-      "marie - lofigirl x nativeinstruments beatbattle.wav",
-      "marie - petals on the ground.wav",
+      "marie - Camadorea.mp3",
+      "marie - grayscale Final.flac",
+      "207 marie - winterberry.mp3",
+      "187 marie - wandering.mp3",
+      "marie - lofigirl x nativeinstruments beatbattle.mp3",
+      "marie - petals on the ground.mp3",
       "marie - wooden wagon.flac",
       "sabri4.mp3"
     ]
@@ -261,26 +237,26 @@ const data = [
     name: "Ambient",
     folder: "ambient",
     files: [
-      "marie - Always There (41k 24 wav).wav",
-      "marie - One Breath Away (41k 24 wav).wav",
-      "marie - Frosted In Time (41k 24 wav).wav",
+      "marie - Always There.mp3",
+      "marie - One Breath Away.mp3",
+      "marie - Frosted In Time.mp3",
       "marie - sorry.flac",
       "marie - phantom.flac",
       "marie - collide.flac",
       "marie - goodbye, thank you.flac",
-      "hershel - despite time.flac"
+      "hershel - despite time.mp3"
     ]
   },
   {
     name: "House",
     folder: "house",
     files: [
-      "marie - Patterns (render4).flac",
-      "marie - Cerulean (render3).flac",
-      "marie - Cloverleaf (render2).flac",
-      "marie - Crystalball (render2).flac",
-      "marie - Navigator (render 4).flac",
-      "marie - Skylit (render1).flac"
+      "marie - Patterns (render4).mp3",
+      "marie - Cerulean (render3).mp3",
+      "marie - Cloverleaf (render2).mp3",
+      "marie - Crystalball (render2).mp3",
+      "marie - Navigator (render 4).mp3",
+      "marie - Skylit (render1).mp3"
     ]
   },
   {
@@ -288,8 +264,8 @@ const data = [
     folder: "EDM",
     files: [
       "grawwww.flac",
-      "2) papercuties - before.wav",
-      "4) papercuties - our songggg.wav"
+      "2) papercuties - before.mp3",
+      "4) papercuties - our songggg.mp3"
     ]
   },
   {
@@ -437,6 +413,14 @@ data.forEach(genre => {
     });
 
     audio.addEventListener("ended", () => {
+      playBtn.innerHTML = icons.play;
+      playBtn.classList.remove("playing");
+    });
+
+    audio.addEventListener("error", () => {
+      const codes = {1: "ABORTED", 2: "NETWORK", 3: "DECODE", 4: "SRC_NOT_SUPPORTED"};
+      const code = audio.error ? audio.error.code : "sconosciuto";
+      alert("Errore caricamento (" + fileName + "): " + (codes[code] || code));
       playBtn.innerHTML = icons.play;
       playBtn.classList.remove("playing");
     });
