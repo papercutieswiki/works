@@ -52,9 +52,6 @@ html, body {
   margin-top: 236px;
   list-style: none;
 }
-.genre {
-  border-top: none;
-}
 .genre-title {
   font-size: 26px;
   line-height: 1.55;
@@ -69,132 +66,35 @@ html, body {
   color: #4a4a4a;
 }
 .files {
-  overflow: hidden;
-  max-height: 0;
+  display: none;
 }
 .files.open {
-  max-height: 1200px;
+  display: block;
 }
 .files-inner {
-  position: relative;
   margin: 12px 0 28px 4px;
   padding-left: 24px;
   border-left: 1px solid #d8d8d8;
 }
 .file-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 24px;
-  padding: 14px 0;
+  padding: 12px 0;
 }
 .file-name {
   font-size: 18px;
   color: #8c8c8c;
   white-space: nowrap;
-  padding-top: 6px;
 }
 .file-name::before {
   content: "\2022";
   margin-right: 10px;
   color: #8c8c8c;
 }
-.player {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 260px;
-}
-.player-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.play-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.play-btn svg {
-  width: 14px;
-  height: 14px;
-  stroke: #8c8c8c;
-  fill: none;
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.play-btn.playing svg {
-  stroke: #4a4a4a;
-}
-.progress {
-  flex: 1;
-  height: 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-.progress-track {
-  position: relative;
-  width: 220px;
-  height: 1px;
-  background: #d8d8d8;
-}
-.progress-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 1px;
-  width: 0%;
-  background: #4a4a4a;
-}
-.progress-dot {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  left: 0%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #4a4a4a;
-}
-.player-bottom {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding-right: 2px;
-}
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-.icon-btn svg {
-  width: 14px;
-  height: 14px;
-  stroke: #b0b0b0;
-  fill: none;
-  stroke-width: 1.3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.icon-btn:hover svg {
-  stroke: #4a4a4a;
-}
-.icon-btn.active svg {
-  stroke: #4a4a4a;
+audio {
+  height: 32px;
+  filter: grayscale(1);
 }
 </style>
 </head>
@@ -290,24 +190,18 @@ const data = [
   }
 ];
 
-const icons = {
-  play: '<svg viewBox="0 0 12 14"><path d="M1 1 L11 7 L1 13 Z"/></svg>',
-  pause: '<svg viewBox="0 0 12 14"><path d="M2 1 L2 13 M10 1 L10 13"/></svg>',
-  mute: '<svg viewBox="0 0 16 16"><path d="M2 6 L5 6 L9 2 L9 14 L5 10 L2 10 Z"/><path d="M11.5 5.5 C13 7 13 9 11.5 10.5"/></svg>',
-  muted: '<svg viewBox="0 0 16 16"><path d="M2 6 L5 6 L9 2 L9 14 L5 10 L2 10 Z"/><path d="M11 6 L14.5 9.5 M14.5 6 L11 9.5"/></svg>',
-  download: '<svg viewBox="0 0 16 16"><path d="M8 1 L8 10 M4.5 7 L8 10.5 L11.5 7"/><path d="M2 13.5 L14 13.5"/></svg>',
-  loop: '<svg viewBox="0 0 16 16"><path d="M2 8 C2 4.5 4.8 2.5 8 2.5 C10.2 2.5 12 3.6 13 5.3"/><path d="M10.5 2.5 L13.2 5.3 L14.5 2.6"/><path d="M14 8 C14 11.5 11.2 13.5 8 13.5 C5.8 13.5 4 12.4 3 10.7"/><path d="M5.5 13.5 L2.8 10.7 L1.5 13.4"/></svg>'
-};
-
 const container = document.getElementById("genres");
-let currentAudio = null;
-let currentPlayBtn = null;
 let openFilesEl = null;
 let openTitleEl = null;
 
+document.addEventListener("play", e => {
+  document.querySelectorAll("audio").forEach(a => {
+    if (a !== e.target) a.pause();
+  });
+}, true);
+
 data.forEach(genre => {
   const li = document.createElement("li");
-  li.className = "genre";
 
   const title = document.createElement("div");
   title.className = "genre-title";
@@ -322,7 +216,6 @@ data.forEach(genre => {
 
   genre.files.forEach(fileName => {
     const src = genre.folder + "/" + encodeURIComponent(fileName);
-    const audio = new Audio(src);
 
     const row = document.createElement("div");
     row.className = "file-row";
@@ -331,130 +224,14 @@ data.forEach(genre => {
     nameEl.className = "file-name";
     nameEl.textContent = fileName;
 
-    const player = document.createElement("div");
-    player.className = "player";
-
-    const top = document.createElement("div");
-    top.className = "player-top";
-
-    const playBtn = document.createElement("button");
-    playBtn.className = "play-btn";
-    playBtn.innerHTML = icons.play;
-
-    const progress = document.createElement("div");
-    progress.className = "progress";
-    const track = document.createElement("div");
-    track.className = "progress-track";
-    const fill = document.createElement("div");
-    fill.className = "progress-fill";
-    const dot = document.createElement("div");
-    dot.className = "progress-dot";
-    track.appendChild(fill);
-    track.appendChild(dot);
-    progress.appendChild(track);
-
-    top.appendChild(playBtn);
-    top.appendChild(progress);
-
-    const bottom = document.createElement("div");
-    bottom.className = "player-bottom";
-
-    const muteBtn = document.createElement("button");
-    muteBtn.className = "icon-btn";
-    muteBtn.innerHTML = icons.mute;
-
-    const downloadBtn = document.createElement("a");
-    downloadBtn.className = "icon-btn";
-    downloadBtn.href = src;
-    downloadBtn.download = fileName;
-    downloadBtn.innerHTML = icons.download;
-
-    const loopBtn = document.createElement("button");
-    loopBtn.className = "icon-btn";
-    loopBtn.innerHTML = icons.loop;
-
-    bottom.appendChild(muteBtn);
-    bottom.appendChild(downloadBtn);
-    bottom.appendChild(loopBtn);
-
-    player.appendChild(top);
-    player.appendChild(bottom);
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.preload = "none";
+    audio.src = src;
 
     row.appendChild(nameEl);
-    row.appendChild(player);
+    row.appendChild(audio);
     inner.appendChild(row);
-
-    playBtn.addEventListener("click", () => {
-      if (currentAudio && currentAudio !== audio) {
-        currentAudio.pause();
-        if (currentPlayBtn) {
-          currentPlayBtn.innerHTML = icons.play;
-          currentPlayBtn.classList.remove("playing");
-        }
-      }
-      if (audio.paused) {
-        const p = audio.play();
-        if (p !== undefined) {
-          p.catch(err => {
-            alert("Errore riproduzione (" + fileName + "): " + err.name + " - " + err.message);
-            playBtn.innerHTML = icons.play;
-            playBtn.classList.remove("playing");
-          });
-        }
-        playBtn.innerHTML = icons.pause;
-        playBtn.classList.add("playing");
-        currentAudio = audio;
-        currentPlayBtn = playBtn;
-      } else {
-        audio.pause();
-        playBtn.innerHTML = icons.play;
-        playBtn.classList.remove("playing");
-      }
-    });
-
-    audio.addEventListener("ended", () => {
-      playBtn.innerHTML = icons.play;
-      playBtn.classList.remove("playing");
-    });
-
-    audio.addEventListener("error", () => {
-      const codes = {1: "ABORTED", 2: "NETWORK", 3: "DECODE", 4: "SRC_NOT_SUPPORTED"};
-      const code = audio.error ? audio.error.code : "sconosciuto";
-      alert("Errore caricamento (" + fileName + "): " + (codes[code] || code));
-      playBtn.innerHTML = icons.play;
-      playBtn.classList.remove("playing");
-    });
-
-    audio.addEventListener("timeupdate", () => {
-      if (audio.duration) {
-        const pct = (audio.currentTime / audio.duration) * 100;
-        fill.style.width = pct + "%";
-        dot.style.left = pct + "%";
-      }
-    });
-
-    progress.addEventListener("click", e => {
-      const rect = track.getBoundingClientRect();
-      const pct = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
-      if (audio.duration) {
-        audio.currentTime = pct * audio.duration;
-      }
-    });
-
-    muteBtn.addEventListener("click", () => {
-      audio.muted = !audio.muted;
-      muteBtn.innerHTML = audio.muted ? icons.muted : icons.mute;
-      muteBtn.classList.toggle("active", audio.muted);
-    });
-
-    downloadBtn.addEventListener("click", e => {
-      e.stopPropagation();
-    });
-
-    loopBtn.addEventListener("click", () => {
-      audio.loop = !audio.loop;
-      loopBtn.classList.toggle("active", audio.loop);
-    });
   });
 
   filesWrap.appendChild(inner);
@@ -466,15 +243,7 @@ data.forEach(genre => {
     if (openFilesEl && openFilesEl !== filesWrap) {
       openFilesEl.classList.remove("open");
       if (openTitleEl) openTitleEl.classList.remove("active");
-      if (currentAudio) {
-        currentAudio.pause();
-        if (currentPlayBtn) {
-          currentPlayBtn.innerHTML = icons.play;
-          currentPlayBtn.classList.remove("playing");
-        }
-        currentAudio = null;
-        currentPlayBtn = null;
-      }
+      openFilesEl.querySelectorAll("audio").forEach(a => a.pause());
     }
     if (isOpen) {
       filesWrap.classList.remove("open");
