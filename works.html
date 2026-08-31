@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>works</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@font-face {
+  font-family: "SF UI Display";
+  src: url("SFUIDisplay-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  min-height: 1080px;
+  background: #ffffff;
+  font-family: "SF UI Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  color: #8c8c8c;
+}
+.page {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 54px 128px 80px 44px;
+  min-height: 1080px;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+}
+.topbar a {
+  color: #8c8c8c;
+  text-decoration: none;
+}
+.topbar a:hover {
+  color: #4a4a4a;
+}
+.topbar span {
+  color: #8c8c8c;
+  user-select: none;
+  pointer-events: none;
+}
+.genres {
+  margin-top: 236px;
+  list-style: none;
+}
+.genre {
+  border-top: none;
+}
+.genre-title {
+  font-size: 26px;
+  line-height: 1.55;
+  cursor: pointer;
+  display: inline-block;
+  color: #8c8c8c;
+}
+.genre-title:hover {
+  color: #4a4a4a;
+}
+.genre-title.active {
+  color: #4a4a4a;
+}
+.files {
+  overflow: hidden;
+  max-height: 0;
+}
+.files.open {
+  max-height: 1200px;
+}
+.files-inner {
+  position: relative;
+  margin: 12px 0 28px 4px;
+  padding-left: 24px;
+  border-left: 1px solid #d8d8d8;
+}
+.file-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 14px 0;
+}
+.file-name {
+  font-size: 18px;
+  color: #8c8c8c;
+  white-space: nowrap;
+  padding-top: 6px;
+}
+.file-name::before {
+  content: "\2022";
+  margin-right: 10px;
+  color: #8c8c8c;
+}
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 260px;
+}
+.player-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.play-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.play-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: #8c8c8c;
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.play-btn.playing svg {
+  stroke: #4a4a4a;
+}
+.progress {
+  flex: 1;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.progress-track {
+  position: relative;
+  width: 220px;
+  height: 1px;
+  background: #d8d8d8;
+}
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0%;
+  background: #4a4a4a;
+}
+.progress-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 0%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4a4a4a;
+}
+.player-bottom {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-right: 2px;
+}
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.icon-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: #b0b0b0;
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-btn:hover svg {
+  stroke: #4a4a4a;
+}
+.icon-btn.active svg {
+  stroke: #4a4a4a;
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a href="https://lucianomasala.xyz">&lt;- go back</a>
+    <span>(works)</span>
+  </div>
+  <ul class="genres" id="genres"></ul>
+</div>
+<script>
+const data = [
+  {
+    name: "Orchestral - Folk",
+    folder: "orchestral-folk",
+    files: [
+      "aviator render5 083126.flac",
+      "still Final (fixed master 26 03).flac",
+      "mimosa.flac",
+      "hate v1.flac"
+    ]
+  },
+  {
+    name: "Lofi Hip-Hop",
+    folder: "lofi-hiphop",
+    files: [
+      "197 marie - eco stream.flac",
+      "marie - Camadorea.wav",
+      "207 marie - winterberry.wav",
+      "187 marie - wandering.wav",
+      "marie - lofigirl x nativeinstruments beatbattle.wav",
+      "marie - petals on the ground.wav",
+      "marie - wooden wagon.flac",
+      "sabri4.mp3"
+    ]
+  },
+  {
+    name: "Ambient",
+    folder: "ambient",
+    files: [
+      "marie - Always There (41k 24 wav).wav",
+      "marie - One Breath Away (41k 24 wav).wav",
+      "marie - Frosted In Time (41k 24 wav).wav",
+      "marie - sorry.flac",
+      "marie - phantom.flac",
+      "marie - collide.flac",
+      "marie - goodbye, thank you.flac",
+      "hershel - despite time.flac"
+    ]
+  },
+  {
+    name: "House",
+    folder: "house",
+    files: [
+      "marie - Patterns (render4).flac",
+      "marie - Cerulean (render3).flac",
+      "marie - Cloverleaf (render2).flac",
+      "marie - Crystalball (render2).flac",
+      "marie - Navigator (render 4).flac",
+      "marie - Skylit (render1).flac"
+    ]
+  },
+  {
+    name: "EDM",
+    folder: "edm",
+    files: [
+      "grawwww.flac",
+      "2) papercuties - before.wav",
+      "4) papercuties - our songggg.wav"
+    ]
+  },
+  {
+    name: "Videogame OST",
+    folder: "videogame-ost",
+    files: [
+      "mainlobby1.mp3",
+      "MainMenu1.mp3",
+      "servantsquarters3.mp3",
+      "ballroom3.mp3",
+      "Glass Horizon render 3 ,for RoHorizons.mp3",
+      "Cooling Lava render3.mp3"
+    ]
+  },
+  {
+    name: "Rock",
+    folder: "rock",
+    files: [
+      "sabri1.mp3",
+      "vocaloid test1 Redux.flac"
+    ]
+  }
+];
+
+const icons = {
+  play: '<svg viewBox="0 0 12 14"><path d="M1 1 L11 7 L1 13 Z"/></svg>',
+  pause: '<svg viewBox="0 0 12 14"><path d="M2 1 L2 13 M10 1 L10 13"/></svg>',
+  mute: '<svg viewBox="0 0 16 16"><path d="M2 6 L5 6 L9 2 L9 14 L5 10 L2 10 Z"/><path d="M11.5 5.5 C13 7 13 9 11.5 10.5"/></svg>',
+  muted: '<svg viewBox="0 0 16 16"><path d="M2 6 L5 6 L9 2 L9 14 L5 10 L2 10 Z"/><path d="M11 6 L14.5 9.5 M14.5 6 L11 9.5"/></svg>',
+  download: '<svg viewBox="0 0 16 16"><path d="M8 1 L8 10 M4.5 7 L8 10.5 L11.5 7"/><path d="M2 13.5 L14 13.5"/></svg>',
+  loop: '<svg viewBox="0 0 16 16"><path d="M2 8 C2 4.5 4.8 2.5 8 2.5 C10.2 2.5 12 3.6 13 5.3"/><path d="M10.5 2.5 L13.2 5.3 L14.5 2.6"/><path d="M14 8 C14 11.5 11.2 13.5 8 13.5 C5.8 13.5 4 12.4 3 10.7"/><path d="M5.5 13.5 L2.8 10.7 L1.5 13.4"/></svg>'
+};
+
+const container = document.getElementById("genres");
+let currentAudio = null;
+let currentPlayBtn = null;
+let openFilesEl = null;
+let openTitleEl = null;
+
+data.forEach(genre => {
+  const li = document.createElement("li");
+  li.className = "genre";
+
+  const title = document.createElement("div");
+  title.className = "genre-title";
+  title.textContent = genre.name;
+  li.appendChild(title);
+
+  const filesWrap = document.createElement("div");
+  filesWrap.className = "files";
+
+  const inner = document.createElement("div");
+  inner.className = "files-inner";
+
+  genre.files.forEach(fileName => {
+    const src = "files/" + genre.folder + "/" + encodeURIComponent(fileName);
+    const audio = new Audio(src);
+
+    const row = document.createElement("div");
+    row.className = "file-row";
+
+    const nameEl = document.createElement("div");
+    nameEl.className = "file-name";
+    nameEl.textContent = fileName;
+
+    const player = document.createElement("div");
+    player.className = "player";
+
+    const top = document.createElement("div");
+    top.className = "player-top";
+
+    const playBtn = document.createElement("button");
+    playBtn.className = "play-btn";
+    playBtn.innerHTML = icons.play;
+
+    const progress = document.createElement("div");
+    progress.className = "progress";
+    const track = document.createElement("div");
+    track.className = "progress-track";
+    const fill = document.createElement("div");
+    fill.className = "progress-fill";
+    const dot = document.createElement("div");
+    dot.className = "progress-dot";
+    track.appendChild(fill);
+    track.appendChild(dot);
+    progress.appendChild(track);
+
+    top.appendChild(playBtn);
+    top.appendChild(progress);
+
+    const bottom = document.createElement("div");
+    bottom.className = "player-bottom";
+
+    const muteBtn = document.createElement("button");
+    muteBtn.className = "icon-btn";
+    muteBtn.innerHTML = icons.mute;
+
+    const downloadBtn = document.createElement("a");
+    downloadBtn.className = "icon-btn";
+    downloadBtn.href = src;
+    downloadBtn.download = fileName;
+    downloadBtn.innerHTML = icons.download;
+
+    const loopBtn = document.createElement("button");
+    loopBtn.className = "icon-btn";
+    loopBtn.innerHTML = icons.loop;
+
+    bottom.appendChild(muteBtn);
+    bottom.appendChild(downloadBtn);
+    bottom.appendChild(loopBtn);
+
+    player.appendChild(top);
+    player.appendChild(bottom);
+
+    row.appendChild(nameEl);
+    row.appendChild(player);
+    inner.appendChild(row);
+
+    playBtn.addEventListener("click", () => {
+      if (currentAudio && currentAudio !== audio) {
+        currentAudio.pause();
+        if (currentPlayBtn) {
+          currentPlayBtn.innerHTML = icons.play;
+          currentPlayBtn.classList.remove("playing");
+        }
+      }
+      if (audio.paused) {
+        audio.play();
+        playBtn.innerHTML = icons.pause;
+        playBtn.classList.add("playing");
+        currentAudio = audio;
+        currentPlayBtn = playBtn;
+      } else {
+        audio.pause();
+        playBtn.innerHTML = icons.play;
+        playBtn.classList.remove("playing");
+      }
+    });
+
+    audio.addEventListener("ended", () => {
+      playBtn.innerHTML = icons.play;
+      playBtn.classList.remove("playing");
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      if (audio.duration) {
+        const pct = (audio.currentTime / audio.duration) * 100;
+        fill.style.width = pct + "%";
+        dot.style.left = pct + "%";
+      }
+    });
+
+    progress.addEventListener("click", e => {
+      const rect = track.getBoundingClientRect();
+      const pct = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+      if (audio.duration) {
+        audio.currentTime = pct * audio.duration;
+      }
+    });
+
+    muteBtn.addEventListener("click", () => {
+      audio.muted = !audio.muted;
+      muteBtn.innerHTML = audio.muted ? icons.muted : icons.mute;
+      muteBtn.classList.toggle("active", audio.muted);
+    });
+
+    downloadBtn.addEventListener("click", e => {
+      e.stopPropagation();
+    });
+
+    loopBtn.addEventListener("click", () => {
+      audio.loop = !audio.loop;
+      loopBtn.classList.toggle("active", audio.loop);
+    });
+  });
+
+  filesWrap.appendChild(inner);
+  li.appendChild(filesWrap);
+  container.appendChild(li);
+
+  title.addEventListener("click", () => {
+    const isOpen = filesWrap.classList.contains("open");
+    if (openFilesEl && openFilesEl !== filesWrap) {
+      openFilesEl.classList.remove("open");
+      if (openTitleEl) openTitleEl.classList.remove("active");
+      if (currentAudio) {
+        currentAudio.pause();
+        if (currentPlayBtn) {
+          currentPlayBtn.innerHTML = icons.play;
+          currentPlayBtn.classList.remove("playing");
+        }
+        currentAudio = null;
+        currentPlayBtn = null;
+      }
+    }
+    if (isOpen) {
+      filesWrap.classList.remove("open");
+      title.classList.remove("active");
+      openFilesEl = null;
+      openTitleEl = null;
+    } else {
+      filesWrap.classList.add("open");
+      title.classList.add("active");
+      openFilesEl = filesWrap;
+      openTitleEl = title;
+    }
+  });
+});
+</script>
+</body>
+</html>
