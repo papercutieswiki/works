@@ -23,6 +23,31 @@ html, body {
   font-family: "SF UI Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   color: #8c8c8c;
 }
+.page {<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>works</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@font-face {
+  font-family: "SF UI Display";
+  src: url("SFUIDisplay-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  min-height: 1080px;
+  background: #ffffff;
+  font-family: "SF UI Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  color: #8c8c8c;
+}
 .page {
   width: 100%;
   max-width: 1920px;
@@ -392,7 +417,14 @@ data.forEach(genre => {
         }
       }
       if (audio.paused) {
-        audio.play();
+        const p = audio.play();
+        if (p !== undefined) {
+          p.catch(err => {
+            alert("Errore riproduzione (" + fileName + "): " + err.name + " - " + err.message);
+            playBtn.innerHTML = icons.play;
+            playBtn.classList.remove("playing");
+          });
+        }
         playBtn.innerHTML = icons.pause;
         playBtn.classList.add("playing");
         currentAudio = audio;
