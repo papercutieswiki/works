@@ -320,7 +320,7 @@ data.forEach(genre => {
   inner.className = "files-inner";
 
   genre.files.forEach(fileName => {
-    const src = "files/" + genre.folder + "/" + encodeURIComponent(fileName);
+    const src = genre.folder + "/" + encodeURIComponent(fileName);
     const audio = new Audio(src);
 
     const row = document.createElement("div");
